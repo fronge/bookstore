@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block body %}
+	<div class="register_con">
+		<div class="l_con fl">
+			<a class="reg_logo"><img src="/static/images/logo.png" style="width: 160px; height: 53px;"></a>
+			<div class="reg_slogan">学计算机  ·  来尚硅谷</div>
+			<div class="reg_banner"></div>
+		</div>
+
+		<div class="r_con fr">
+			<div class="reg_title clearfix">
+				<h1>用户注册</h1>
+				<a href="{% url 'users:login' %}">登录</a>
+			</div>
+			<div class="reg_form clearfix">
+				<ul>
+					<li>
+						<label>用户名:</label>
+						<input type="text" name="user_name" id="user_name">
+						<span class="error_tip">提示 信息</span>
+					</li>					
+					<li>
+						<label>密码:</label>
+						<input type="password" name="pwd" id="pwd">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>确认密码:</label>
+						<input type="password" name="cpwd" id="cpwd">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>邮箱:</label>
+						<input type="text" name="email" id="email">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li class="agreement">
+						<input type="checkbox" name="allow" id="allow" checked="checked">
+						<label>同意”尚硅谷书城用户使用协议“</label>
+						<span class="error_tip2">提示信息</span>
+					</li>
+					<li class="reg_sub">
+					    <button id='btn'>注册</button>
+                    </li>
+				</ul>
+                    <strong style="font-size: large">{{ errmsg }}</strong>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+    <script type="text/javascript">
+        $("#btn").click(function () {
+            var username=$("#user_name").val();
+            var password=$("#pwd").val();
+            var email=$("#email").val();
+            var data={
+                "username":username,
+                "password":password,
+                "email":email
+            };
+            console.log(data);
+            $.ajax({
+                data:JSON.stringify(data),
+                type:"POST",
+                url:"register_hander",
+                traditional:true,
+                success:function (res) {
+                    if(res.res===1){
+                        location.href='login';
+                    }else if (res.res===2){
+                        alert('内容不能为空');
+                    }else if (res.res===3){
+                        alert('用户名以存在')
+                    }else {
+                        alert("注册失败");
+                    }
+                },
+                error:function (res) {
+                    console.log("error!");
+                }
+            })
+        })
+
+    </script>
+{% endblock %}

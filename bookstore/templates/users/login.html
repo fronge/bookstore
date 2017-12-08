@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+    {% block title %}
+    	<title>尚硅谷书城-登录</title>
+    {% endblock %}
+	{% block body %}
+	<div class="login_top clearfix">
+		<a href="index.html" class="login_logo"><img src="{% static 'images/logo.png'%}" style="width: 160px; height: 53px;"></a>
+	</div>
+	<div class="login_form_bg">
+		<div class="login_form_wrap clearfix">
+			<div class="login_banner fl"></div>
+			<div class="slogan fl">学计算机 · 来尚硅谷</div>
+			<div class="login_form fr">
+				<div class="login_title clearfix">
+					<h1>用户登录</h1>
+					<a href="{% url 'users:register' %}">立即注册</a>
+				</div>
+				<div class="form_input">
+                    <input type="text" name="username" class="name_input" placeholder="请输入用户名" id="user_name">
+                    <div class="user_error">输入错误</div>
+                    <input type="password" name="pwd" class="pass_input" placeholder="请输入密码" id="pwd">
+                    <div class="pwd_error">输入错误</div>
+                    <div class="more_input clearfix">
+                        <input id="remember" type="checkbox" name="remember" {{ checked }}>
+                        <label>记住用户名</label>
+                        <a href="#">忘记密码</a>
+                    </div>
+                    <button id="btn" value="登录" class="input_submit">登录</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+    $('#btn').click(function () {
+        var username = $('#user_name').val();
+        var password = $('#pwd').val();
+        var remember = $('#remember').prop('checked');
+        console.log(remember);
+        var data = {
+            remember :remember,
+            username:username,
+            password:password,
+{#            next_path:'/books/index'#}
+        };
+    $.ajax(
+        {
+        data:JSON.stringify(data),
+        url:'login_check',
+        type:"POST",
+        traditional:true,
+        success:function (res) {
+            if (res.res === 1){
+                location.href = '/books/index'
+            }else if (res.res === 0){
+                alert("用户名和密码错误")
+            }else if(res.res === 2){
+                alert("用户名或密码不能为空")
+            }else{
+                alert('登录失败')
+            }
+        },
+        error:function (res) {
+            alert("登录失败")
+        }
+        })
+    })
+
+</script>
+	{% endblock %}
