@@ -44,7 +44,7 @@
                 </div>
             </li>
             <li class="col07"></li>
-            <li class="col08"><a href="javascript:;">删除</a></li>
+            <li class="col08"><a href="javascript:;" class="dels">删除</a></li>
         </ul>
     {% endfor %}
 
@@ -240,7 +240,35 @@
                 $(this).val(pre_books_count)
             }
         })
+
+        //删除商品
+        $(".dels").click(function(){
+            books_ul = $(this).parents('ul')
+            books_id = books_ul.find('.num_show').attr('books_id')
+            csrf = $('input[name="csrfmiddlewaretoken"]').val()
+            params = {
+                'books_id': books_id,
+                "csrfmiddlewaretoken":csrf
+            }
+            $.post('/cart/cart_del/',params,function(data){
+                if (data.res == 5){
+                    //删除成功
+                    books_ul.remove()
+                    update_cart_count()
+                    update_total_price()
+                    alert("删除成功")
+                }else{
+                    alert(data.errmsg)
+                }
+            })
+           
+        })
+
+        update_cart_count()
+        update_total_price()
+
     })
+
 
 </script>
 

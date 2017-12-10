@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^cart_show/$', views.cart_show,name='cart_show' ),
     url(r'^cart_update/$', views.cart_update,name='cart_update' ),
     url(r'^cart_count/$', views.cart_count,name='cart_count' ),
+    url(r'^cart_del/$', views.cart_del,name='cart_del' ),
 
 ]

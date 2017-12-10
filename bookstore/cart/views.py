@@ -63,7 +63,6 @@ def cart_add(request):
 		'res':5
 	})
 
-
 @login_required
 def cart_show(request):
 	"""显示用户购物车页面"""
@@ -144,12 +143,32 @@ def cart_count(request):
 	conn = get_redis_connection('default')
 	cart_key = 'cart_%d'%request.session.get('passport_id')
 	res = 0
+	# 获取的是什么　hvals对应哈希对应的所有的值
+	# todo 获取的比前段获取的多一个
 	res_list = conn.hvals(cart_key)
-
+	print(res_list)
 	for i in res_list:
 		res += int(i)
 
 	return JsonResponse({'res':res})
+
+@login_required
+def cart_del(request):
+	"""删除用户购物车中的商品信息"""
+	books_id = request.POST.get('books_id')
+	# 对商品信息做验证
+	if not books_id:
+		return JsonResponse({'res':1,'errmsg':'数据不完整'})
+	books = Books.objects.get_books_by_id(books_id=books_id)
+	if not books:
+		return JsonResponse({"res":2,"errmsg":'商品不存在'})
+
+	# 删除购物车中商品信息
+	conn = get_redis_connection('default')
+	cart_key = 'cart_%d'%request.session.get('passport_id')
+	conn.hdel(cart_key,books_id)
+
+	return JsonResponse({"res":5})
 
 # 数据验证函数
 def data_required(books_id,books_count):
