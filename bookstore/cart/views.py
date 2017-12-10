@@ -18,10 +18,6 @@ def cart_add(request):
 
 	books_id = request.POST.get('books_id')
 	books_count = request.POST.get('books_count')
-	# data = json.loads(request.body.decode('utf-8'))
-	# books_id = data.get('books_id')
-	# books_count = data.get('books_count')
-	print(books_count,books_id)
 	# 进行数据校验
 	if not all([books_count,books_id]):
 		return JsonResponse({
@@ -87,20 +83,99 @@ def cart_show(request):
 	total_price = 0
 	for id, count in res_dict.items():
 		# 根据缓存中的book_id来获取书的对象
-		books = Books.objects.get_books_by_id(books_id=id)
-		# 每种书的小计，赋值给书作为一个属性
-		books.amount = int(count)*books.price
-		# 每种书的数量
-		books.count = count
-		books_li.append(books)
+		try:
+			books = Books.objects.get_books_by_id(books_id=id)
+			# 每种书的小计，赋值给书作为一个属性
+			books.amount = int(count)*books.price
+			# 每种书的数量
+			books.count = count
+			books_li.append(books)
 
-		total_count += int(count)
-		total_price += int(count) * books.price
+			total_count += int(count)
+			total_price += int(count) * books.price
+		except Exception as e:
+			print(e)
 
 	# 定义模板的上下文
 	context = {
 		'books_li': books_li,
-		'tital_count':total_count,
+		'total_count':total_count,
 		'total_price':total_price,
 	}
 	return render(request,'cart/cart.html',context)
+
+@login_required
+def cart_update(request):
+	# 接受数据
+	books_id = request.POST.get('books_id')
+	books_count = request.POST.get('books_count')
+	print(books_id,books_count)
+	# 数据校验
+	if not all([books_count,books_id]):
+		return JsonResponse({
+			'res': 1,
+			'errmsg': '数据不完整'
+		})
+
+	books = Books.objects.get_books_by_id(books_id=books_id)
+	if books is None:
+		# 商品不存在
+		return JsonResponse({
+			'res': 2,
+			'errmsg': "商品不存在"
+		})
+	try:
+		count = int(books_count)
+	except Exception as e:
+		return JsonResponse({
+			'res': 3,
+			'errmsg': '商品数量必须为数字'
+		})
+	conn = get_redis_connection('default')
+	cart_key = 'cart_%d'%request.session.get('passport_id')
+	conn.hset(cart_key,books_id,count)
+	return JsonResponse({
+		'res':5
+		})
+
+@login_required
+def cart_count(request):
+	"""获取用户购物车中的商品数目"""
+	conn = get_redis_connection('default')
+	cart_key = 'cart_%d'%request.session.get('passport_id')
+	res = 0
+	res_list = conn.hvals(cart_key)
+
+	for i in res_list:
+		res += int(i)
+
+	return JsonResponse({'res':res})
+
+# 数据验证函数
+def data_required(books_id,books_count):
+	if not all([books_count,books_id]):
+		return {
+			'res': 1,
+			'errmsg': '数据不完整'
+		}
+
+	books = Books.objects.get_books_by_id(books_id=books_id)
+	if books is None:
+		# 商品不存在
+		return {
+			'res': 2,
+			'errmsg': "商品不存在"
+		}
+	try:
+		count = int(books_count)
+	except Exception as e:
+		return {
+			'res': 3,
+			'errmsg': '商品数量必须为数字'
+		}
+	conn = get_redis_connection('default')
+	cart_key = 'cart_%d'%passport_id
+	conn.hset(cart_key,books_id,res)
+	return {
+		'res':5
+		}
