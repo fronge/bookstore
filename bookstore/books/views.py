@@ -2,10 +2,13 @@ from django.shortcuts import render,HttpResponseRedirect
 from .models import Books
 from .enums import *
 from django.core.paginator import Paginator
+from django.views.decorators.cache import cache_page
 # Create your views here.
 
+@cache_page(60 * 1)
 def index(request):
 	'''显示首页'''
+	print(11111)
 	# 查询每个种类的3个新品信息和4个销量最好的商品信息
 	python_new = Books.objects.get_books_by_type(PYTHON, 3, sort='new')
 	python_hot = Books.objects.get_books_by_type(PYTHON, 4, sort='hot')
@@ -40,7 +43,7 @@ def index(request):
 
 def detail(request,books_id):
 	"""商品详情"""
-	books = Books.objects.get_books_id(books_id =books_id)
+	books = Books.objects.get_books_by_id(books_id =books_id)
 	if books is None:
 		# 商品不存在，跳转到首页
 		return HttpResponseRedirect('books:index')
@@ -48,6 +51,7 @@ def detail(request,books_id):
 	books_li = Books.objects.get_books_by_type(type_id=books.type_id,limit=2,sort='new')
 	return render(request,'books/detail.html',{"books":books,"books_li":books_li})
 
+@cache_page(60 * 5)
 def list(request,type_id,page):
 	"""商品列表页面"""
 	sort = request.GET.get('sort','default')

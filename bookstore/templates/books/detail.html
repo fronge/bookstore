@@ -1,96 +1,261 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
     {% block title %}
-	<title>尚硅谷书城-详情</title>
+    <title>尚硅谷书城-详情</title>
     {% endblock title %}
+
 {% block body %}
 
+    <div class="breadcrumb">
+        <a href="#">全部分类</a>
+        <span>></span>
+        <a href="#">{{ books.type_id }}</a>
+        <span>></span>
+        <a href="#">商品详情</a>
+    </div>
 
-	<div class="breadcrumb">
-		<a href="#">全部分类</a>
-		<span>></span>
-		<a href="#">Python</a>
-		<span>></span>
-		<a href="#">商品详情</a>
-	</div>
+    <div class="book_detail_con clearfix">
+        <div class="book_detail_pic fl"><img src="{% static books.image %}"></div>
 
-	<div class="book_detail_con clearfix">
-		<div class="book_detail_pic fl"><img src="{% static books.image %}"></div>
+        <div class="book_detail_list fr">
+            <h3>{{ books.name }}</h3>
+            <p style="height: 120px;overflow: auto;">{{ books.desc }}</p>
+            <div class="prize_bar">
+                <span class="show_pirce">¥<em>{{ books.price }}</em></span>
+                <span class="show_unit">单  位：{{ books.unit }}</span>
+            </div>
 
-		<div class="book_detail_list fr">
-			<h3>{{ books.name }}</h3>
-			<p>{{ books.desc }}</p>
-			<div class="prize_bar">
-				<span class="show_pirze">¥<em>{{ books.price }}</em></span>
-				<span class="show_unit">单  位：{{ books.unit }}</span>
-			</div>
+            <div class="book_num clearfix">
+                <div class="num_name fl">数 量：</div>
+                <div class="num_add fl">
+                    <input type="text" class="num_show fl" value="1">
+                    <a href="javascript:;" class="add fr">+</a>
+                    <a href="javascript:;" class="minus fr">-</a>   
+                </div> 
+            </div>
+            <div class="total">总价：<em></em></div>
+            <div class="operate_btn">
+                {% csrf_token %}
+                <a href="javascript:;" class="buy_btn">立即购买</a>
+                <a href="javascript:;" books_id="{{ books.id }}" class="add_cart" id="add_cart">加入购物车</a>
+                <a href="javascript:;" class="add_cart" id="write-comment" style="background-color: #ff8800">我要评论</a>
+            </div>
+            <div id="comment-input" data-booksid="{{ books.id }}" data-userid="{{ request.session.passport_id }}">
+                <div class="control">
+                    <input class="input" type="text" placeholder="评论内容" style="margin-top: 100px;width: 400px">
+                </div>
+                <div class="control" id="submit-comment">
+                    {% csrf_token %}
+                    <a class="button is-info">
+                        提交评论
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-			<div class="book_num clearfix">
-				<div class="num_name fl">数 量：</div>
-				<div class="num_add fl">
-					<input type="text" class="num_show fl" value="1">
-					<a href="javascript:;" class="add fr",id="">+</a>
-					<a href="javascript:;" class="minus fr">-</a>	
-				</div> 
-			</div>
-			<div class="total">总价：<em>{{ books.price }}</em></div>
-			<div class="operate_btn">
-				<a href="javascript:;" class="buy_btn">立即购买</a>
-				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>				
-			</div>
-		</div>
-	</div>
-
-	<div class="main_wrap clearfix">
-		<div class="l_wrap fl clearfix">
-			<div class="new_book">
-				<h3>新品推荐</h3>
-				<ul>
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl clearfix">
+            <div class="new_book">
+                <h3>新品推荐</h3>
+                <ul>
                     {% for book in books_li %}
                     <li>
-						<a href="{% url 'books:detail' books_id=book.id %}"><img src="{% static book.image %}"></a>
-						<h4><a href="{% url 'books:detail' books_id=book.id %}">{{ book.name }}</a></h4>
-						<div class="prize">￥{{ book.price }}</div>
-					</li>
+                        <a href="{% url 'books:detail' books_id=book.id %}"><img src="{% static book.image %}"></a>
+                        <h4><a href="{% url 'books:detail' books_id=book.id %}">{{ book.name }}</a></h4>
+                        <div class="prize">￥{{ book.price }}</div>
+                    </li>
                     {% endfor %}
-				</ul>
-			</div>
-		</div>
+                </ul>
+            </div>
+        </div>
 
-		<div class="r_wrap fr clearfix">
-			<ul class="detail_tab clearfix">
-				<li class="active">商品介绍</li>
-				<li>评论</li>
-			</ul>
-			<div class="tab_content">
-				<dl>
-					<dt>商品详情：</dt>
-					<dd>{{ books.detail | safe }}</dd>
-				</dl>
-			</div>
-		</div>
-	</div>
-<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+        <div class="r_wrap fr clearfix">
+            <ul class="detail_tab clearfix">
+                <li class="active"id="detail">商品介绍</li>
+                <li id="comment">评论</li>
+            </ul>
+            <div class="tab_content">
+                <dl id="book_detail">
+                    <dt>商品详情：</dt>
+                    <dd>{{ books.detail | safe }}</dd>
+                </dl>
+                <dl id="book_comment"></dl>
+            </div>
+        </div>
+    </div>
+  <div class="add_jump"></div>
+<!-- <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script> -->
 
 <script type="text/javascript">
+   //将评论输入的隐藏
+  $('#comment-input').hide();
 
-	var add_x = $('#add_cart').offset().top;
-	var add_y = $('#add_cart').offset().left;
+ $(function(){
+    update_total_price()
+    //计算总价钱
+    function update_total_price(){
+      //获取商品数量
+      books_count　=　$('.num_show').val()
+      //单价
+      books_price = $('.show_pirce').children('em').text()
+      //计算总价
+      books_price = parseFloat(books_price)
+      books_count　= parseInt(books_count)
+      //商品总价
+      total_price = books_price * books_count
+      //设置显示商品的总价
+      $('.total').children('em').html(total_price.toFixed(2)+'元')
+    }
 
-	var to_x = $('#show_count').offset().top;
-	var to_y = $('#show_count').offset().left;
+    //商品增加
+    $('.add').click(function(){
+      //获取添加商品的数量
+      books_count = parseInt($('.num_show').val())
+      books_count　+= 1
+      $('.num_show').val(books_count)
+      if (books_count>0) {
+        $('.minus').show()
+      }
+    })
+    //减少商品
+    $('.minus').click(function(){
+      books_count = parseInt($('.num_show').val())
+      console.log(books_count)
 
-	$(".add_jump").css({'left':add_y+80,'top':add_x+10,'display':'block'});
-	$('#add_cart').click(function(){
-		$(".add_jump").stop().animate({
-			'left': to_y+7,
-			'top': to_x+7},
-			"fast", function() {
-				$(".add_jump").fadeOut('fast',function(){
-					$('#show_count').html(2);
-				});
-		});
-	})
+      if (books_count>0) {
+        books_count　-= 1
+        $('.num_show').val(books_count)
+      }else{
+        $('.minus').hide()
+        alert('未添加商品')
+      }
+      
+    })
+  })
+        
+
+    var $add_x = $("#add_cart").offset().top;
+    var $add_y = $("#add_cart").offset().left;
+
+    var $to_x = $('#show_count').offset().top;
+    var $to_y = $('#show_count').offset().left;
+
+
+    // 添加购物车
+    $('#add_cart').click(function () {
+        //获取商品数量 和商品的id
+        books_id = $(this).attr('books_id');
+        books_count = $(".num_show").val();
+        // 这个值从哪来的？
+        csrf = $('input[name="csrfmiddlewaretoken"]').val()
+        //发起请求
+        params = {
+            'books_id' : books_id,
+            'books_count':books_count,
+            'csrfmiddlewaretoken': csrf
+        };
+        $.post('/cart/cart_add/',params,function(data){
+            if (data.res == 5){
+                //添加成功
+                $(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
+                //添加动画
+                $('.add_jump').stop().animate({
+                    'left':$to_y+7,
+                    'top':$to_x+7
+                },
+                "fast",function () {
+                  $('.add_jump').fadeOut('fast',function () {
+                      //获取原有show_count的值
+                      count = $('#show_count').html();
+                      count = parseInt(count) + parseInt(books_count)
+                      //将更新后的物品值显示出来
+                      $('#show_count').html(count)
+                  });
+                });
+            }else {
+                //添加失败
+                alert(data.errmsg)
+            }
+        })
+
+    });
+
+    //获取评论
+    $.ajax({
+        'url':'/comment/comment/' + $('#comment-input').data('booksid')+'/',
+        success:function (res) {
+            if (res.code === 200){
+                var data = res.data;
+                console.log(data);
+                var div_head = '<div>';
+                var div_tail = '</div>';
+                var dom_element = '';
+                for (i=0;i<data.length;i++){
+                    var head = '<div>';
+                    var tail = '</div>';
+                    var temp = head + '<span>' + data[i].user_id + '</span>' + data[i].content + '</span>' + tail;
+                }
+                dom_element = div_head + temp + div_tail;
+                console.log(dom_element);
+                $('#book_comment').append(dom_element);
+            }
+        }
+    });
+    //详情点击效果
+    $('#detail').click(function () {
+        $(this).addClass('active');
+        $('#comment').removeClass('active');
+        $('#book_comment').hide();
+        $("#book_detail").show();
+    });
+
+    //评论点击效果
+    $('#comment').click(function () {
+        $(this).addClass("active");
+        $('#detail').removeClass("active");
+        $("#book_comment").show();
+        $("#book_detail").hide();
+    });
+
+    //点击我要评论
+    $("#write-comment").click(function () {
+        $("#comment-input").show();
+    });
+
+    //点击提交评论
+    $("#submit-comment").click(function () {
+       var book_id = $('#comment-input').data('booksid');
+       var user_id = $('#comment-input').data('userid');
+       var content = $("#comment-input .input").val();
+       var data = {
+           book_id: book_id,
+           user_id: user_id,
+           content: content
+       };
+       console.log("book_id",book_id);
+       console.log('content:', content);
+       console.log(user_id);
+
+        //将数据传给服务器
+       $.ajax({
+           type:'POST',
+           url:'/comment/comment/' + book_id + '/',
+           data: JSON.stringify(data),
+           //成功后
+           success: function (res) {
+               if (res.code === 200){
+                   $('#comment-input').hide();
+               }else {
+                   alert(res.code)
+               }
+           }
+            //error:alert('评论失败，请重试')
+       })
+    })
+
+
+
 </script>
 {% endblock body %}
 

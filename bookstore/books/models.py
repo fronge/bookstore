@@ -26,7 +26,7 @@ class BooksManager(models.Manager):
 			books_li = books_li[:limit]
 		return books_li
 
-	def get_books_id(self,books_id):
+	def get_books_by_id(self,books_id):
 		"""根据商品的id获取商品的信息"""
 		try:
 			books = self.get(id=books_id)
@@ -54,5 +54,9 @@ class Books(BaseModel):
 
 	objects = BooksManager()
 
+	def __str__(self):
+		return self.name
 	class Meta:
+
 		db_table = 's_books'
+

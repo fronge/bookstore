@@ -1,20 +1,21 @@
+{% load staticfiles %}
 {#首页　登录　注册父模板#}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-{% load staticfiles %}
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     {#标题#}
     {% block title %}
 	<title>尚硅谷书城-首页</title>
     {% endblock %}
+
 {% block topfiles %}
 	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css'%}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css'%}">
 	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js'%}"></script>
 	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js'%}"></script>
 	<script type="text/javascript" src="{% static 'js/slide.js'%}"></script>
-{% endblock %}
+{% endblock topfiles %}
 </head>
 <body>
 {% block header_con %}
@@ -29,6 +30,16 @@
                         <span>|</span>
                         <a href="{% url 'users:logout' %}">注销</a>
                     </div>
+                    <div class="user_link fl">
+					<span>|</span>
+					<a href="{% url 'users:user_center_info' %}">用户中心</a>
+					<span>|</span>
+					<a href="{% url 'cart:cart_show' %}">我的购物车</a>
+					<span>|</span>
+					<a href="#">我的订单</a>
+					<span>|</span>
+					<a href="{% url 'books:index' %}">首页</a>
+				</div>
                 {% else %}
                     <div class="login_btn fl">
                         <a href="{% url 'users:login' %}">登录</a>
@@ -38,16 +49,7 @@
                 {% endif %}
 
             {% if request.ssesion.login_line %}
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="{% url 'users:user_center_info' %}">用户中心</a>
-					<span>|</span>
-{#					<a href="{% url 'users:cart' %}">我的购物车</a>#}
-					<a href="#">我的购物车</a>
-					<span>|</span>
-					<a href="#">我的订单</a>
-{#					<a href="{% url 'users:user_center_order' %}">我的订单</a>#}
-				</div>
+
             {% endif %}
 			</div>
 		</div>		
@@ -62,8 +64,8 @@
 			<input type="button" class="input_btn fr" name="" value="搜索">
 		</div>
 		<div class="guest_cart fr">
-			<a href="{% url 'users:user_center_info' %}" class="cart_name fl">我的购物车</a>
-			<div class="book_count fl" id="show_count">1</div>
+			<a href="{% url 'cart:cart_show' %}" class="cart_name fl">我的购物车</a>
+			<div class="book_count fl" id="show_count">0</div>
 		</div>
 	</div>
 {% endblock search_bar %}

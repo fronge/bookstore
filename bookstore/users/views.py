@@ -88,7 +88,7 @@ def logout(request):
 	"""退出登录"""
 	request.session.flush()
 	# 跳转到首页
-	return HttpResponseRedirect('/books/index')
+	return HttpResponseRedirect('/users/login/')
 
 @login_required
 def user(request):

@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
+#ａｄｍｉｎ的用户　admin  密码：admin123
 
 import os
 
@@ -25,7 +26,7 @@ SECRET_KEY = '5hos_=+c1oj_g79a%+htevk+8z)l48nmh5u2+nv74)d249^dv+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.14.27',]
 
 
 # Application definition
@@ -40,13 +41,14 @@ INSTALLED_APPS = [
     'users',#用户
     'books',#商品
     'tinymce',#富文本编辑器
+    'comments',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -139,7 +141,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'heigh':400,
 }
 
-APPEND_SLASH=False
+# 是否给URL添加一个结尾的斜线，只有安装了CommonMiddleware之后才会起作用
+APPEND_SLASH=True
 
 CACHES = {
     'default':{
@@ -151,3 +154,13 @@ CACHES = {
         }
     }
 }
+
+# 简单的缓存会话存储　，　提升了速度，但是放弃了持久性，会话数据有丢失的风险
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# 持久的缓存数据，每次的缓存都会写入到数据库，会占掉一些性能，但是会保证缓存数据的安全性
+# SESSION_ENGINE = "django.contrub.sessions.backends.cached_db"
+# 基于文件的会话，
+# SESSION_ENGINE = "django.contrub.sessions.backends.file"
+# SESSION_FILE_PATH 可以用来控制django在哪里存储会话文件，默认为tempile.gettempdir()的输出，
+# 大部分情况为/tmp,但是需要保证，有读写权限
+SESSION_CACHE_ALIAS = 'default'
