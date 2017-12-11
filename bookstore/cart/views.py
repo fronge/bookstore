@@ -38,7 +38,9 @@ def cart_add(request):
 		return JsonResponse({
 			'res': 3,
 			'errmsg': '商品数量必须为数字'
-		})
+		}) 
+	# data = data_required(books_id,books_count)
+	# count = data.get('count')
 	# 创建一个redis 链接
 	conn = get_redis_connection('default')
 	# 购物车rides存储的key值
@@ -61,7 +63,7 @@ def cart_add(request):
 
 	return JsonResponse({
 		'res':5
-	})
+		})
 
 @login_required
 def cart_show(request):
@@ -108,7 +110,6 @@ def cart_update(request):
 	# 接受数据
 	books_id = request.POST.get('books_id')
 	books_count = request.POST.get('books_count')
-	print(books_id,books_count)
 	# 数据校验
 	if not all([books_count,books_id]):
 		return JsonResponse({
@@ -130,12 +131,17 @@ def cart_update(request):
 			'res': 3,
 			'errmsg': '商品数量必须为数字'
 		})
+	# data = data_required(books_id,books_count)
 	conn = get_redis_connection('default')
 	cart_key = 'cart_%d'%request.session.get('passport_id')
-	conn.hset(cart_key,books_id,count)
-	return JsonResponse({
-		'res':5
-		})
+	try:
+		conn.hset(cart_key,books_id,count)
+	except Exception as e:
+		print (e)
+	finally:
+		return JsonResponse({
+			'res':5
+			})
 
 @login_required
 def cart_count(request):
@@ -144,9 +150,7 @@ def cart_count(request):
 	cart_key = 'cart_%d'%request.session.get('passport_id')
 	res = 0
 	# 获取的是什么　hvals对应哈希对应的所有的值
-	# todo 获取的比前段获取的多一个
 	res_list = conn.hvals(cart_key)
-	print(res_list)
 	for i in res_list:
 		res += int(i)
 
@@ -170,8 +174,11 @@ def cart_del(request):
 
 	return JsonResponse({"res":5})
 
-# 数据验证函数
+
+
+# 数据验证函数 ----- 待完成
 def data_required(books_id,books_count):
+	"""用于校验数据"""
 	if not all([books_count,books_id]):
 		return {
 			'res': 1,
@@ -192,9 +199,9 @@ def data_required(books_id,books_count):
 			'res': 3,
 			'errmsg': '商品数量必须为数字'
 		}
-	conn = get_redis_connection('default')
-	cart_key = 'cart_%d'%passport_id
-	conn.hset(cart_key,books_id,res)
+	
 	return {
-		'res':5
+		'res':5,
+		'count':count
 		}
+
