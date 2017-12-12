@@ -1,13 +1,18 @@
 from django.shortcuts import render,redirect,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.core.urlresolvers import reverse
-from .models import Passport
-from .models import Address
+from .models import Passport,Address
+from order.models import OrderInfo,OrderGoods
 import re
 import json
+# 登录验证的装饰器
 from utils.decorators import login_required
-
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import SignatureExpired
+from users.tasks import send_active_email
+from django.core.mail import send_mail
+from bookstore import settings
 
 # 注册页面
 def register(requset):
@@ -27,28 +32,36 @@ def register_hander(request):
 		'code':500
 		})
 	# 判断用户是有存在
-	user = Passport.objects.filter(username=username)
+	user = Passport.objects.check_passport(username=username)
 	if user:
 		return JsonResponse({'res':3})
+
 	try:
 		# 写入数据库
-		Passport.objects.add_one_passport(username=username,password=password,email=email)
+		passport = Passport.objects.add_one_passport(username=username,password=password,email=email)
+		# 生成激活的token itstangerous
+		serializer = Serializer(settings.SECRET_KEY, 3600)
+		token = serializer.dumps({'confirm': passport.id})
+		print(token)
+		token = token.decode()
+		# 给用户的邮箱发激活邮件
+		send_mail('尚硅谷书城-首页用户激活', '', settings.EMAIL_FROM, [email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
+		# send_active_email(token,username,email)
 		return JsonResponse({
-			'res': 1,
-			'code': 200
+		'res': 1,
+		'code': 200
 		})
-	except:
+	except Exception as e:
+		print(e)
 		return JsonResponse({
 			'res':0,
 		})
-
 
 # 登陆
 def log(request):
 	"""跳转"""
 	checked = ''
 	return render(request,"users/login.html",{"checked":checked})
-
 
 # 登录校验状态 ajax版本
 @csrf_exempt
@@ -102,3 +115,65 @@ def user(request):
 		"books_li": books_li
 	}
 	return render(request,"users/user_center_info.html",context)
+
+@login_required
+def address(request):
+	"""用户中心　地址页"""
+	# 获取登录用户的id
+	passport_id = request.session.get("passport_id")
+
+	if request.method == "GET":
+		# 显示地址页面
+		# 查询用户的默认地址
+		addr = Address.objects.get_default_address(passport_id=passport_id)
+		return render(request,'users/user_center_site.html',{'addr':addr,'page':'address'})
+	else:
+		recipient_name = request.POST.get('username')
+		recipient_addr = request.POST.get('addr')
+		zip_code = request.POST.get('zip_code')
+		recipient_phone = request.POST.get('phone')
+
+	# 校验
+	if not all([recipient_name,recipient_addr,zip_code,recipient_phone]):
+		return render(request,'users/user_center_site.html',{'errmsg':'参数不能为空'})
+
+	# 添加收货地址
+	Address.objects.add_one_address(passport_id=passport_id,recipient_name=recipient_name,
+									recipient_addr=recipient_addr,
+									zip_code=zip_code,recipient_phone=recipient_phone)
+	print('address')
+	return redirect(reverse('users:address'))
+
+@login_required
+def order(request):
+	"""用户中心－订单页"""
+	passport_id = request.session.get('passport_id')
+	order_li = OrderInfo.objects.filter(passport_id=passport_id)
+
+	# 获取订单的商品信息
+	for order in order_li:
+		order_id = order.order_id
+		order_books_li = OrderGoods.objects.filter(order_id=order_id)
+
+		# 计算商品的小计
+		for order_books in order_books_li:
+			count = order_books.count
+			price = order_books.price
+			amount = count * price
+			# 保存订单中每个商品的而小计
+			order_books.amount = amount
+
+		# 给order对象动态增加一个属性order_goods_li 保存订单中商品的信息
+		order.order_books_li = order_books_li
+
+	context = {
+		'order_li':order_li,
+		'page':'order'
+	}
+	print("user_center_order")
+	return render(request,'users/user_center_order.html',context)
+
+@login_required
+def verifycode(request):
+	print("verifycode")
+	return render(request,'users/user_center_site.html')

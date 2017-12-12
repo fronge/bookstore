@@ -29,6 +29,14 @@ class PassportManger(models.Manager):
 			passport = None
 		return passport
 
+	def check_passport(self,username):
+		"""检查用户是否存在"""
+		try:
+			passport = self.get(username=username)
+		except self.model.DoesNotExist:
+			passport = None
+
+		return passport
 
 class AddressManger(models.Manager):
 	"""地址管理类"""
