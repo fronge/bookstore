@@ -1,13 +1,17 @@
 {% load staticfiles %}
 {#首页　登录　注册父模板#}
+{% block head %}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+{% endblock head %}
+
     {#标题#}
-    {% block title %}
+{% block title %}
 	<title>尚硅谷书城-首页</title>
-    {% endblock %}
+{% endblock title %}
 
 {% block topfiles %}
 	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css'%}">
@@ -18,11 +22,12 @@
 {% endblock topfiles %}
 </head>
 <body>
+<div> 注意：本网站只是试用，并无业务</div>
 {% block header_con %}
     {#网页顶部欢迎信息快#}
 	<div class="header_con">
 		<div class="header">
-			<div class="welcome fl">欢迎来到尚硅谷书城!</div>
+			<div class="welcome fl">欢迎来到藏书阁书城!</div>
 			    <div class="fr">
                 {% if request.session.login_line %}
                     <div class="user_link fl">
@@ -32,7 +37,7 @@
                     </div>
                     <div class="user_link fl">
 					<span>|</span>
-					<a href="{% url 'users:user_center_info' %}">用户中心</a>
+					<a href="{% url 'users:center' %}">用户中心</a>
 					<span>|</span>
 					<a href="{% url 'cart:cart_show' %}">我的购物车</a>
 					<span>|</span>
@@ -48,9 +53,6 @@
                     </div>
                 {% endif %}
 
-            {% if request.ssesion.login_line %}
-
-            {% endif %}
 			</div>
 		</div>		
 	</div>
@@ -69,6 +71,7 @@
 		</div>
 	</div>
 {% endblock search_bar %}
+
 {% block navbar %}
 	<div class="navbar_con">
 		<div class="navbar clearfix">
@@ -109,10 +112,9 @@
 			<span>|</span>
 			<a href="#">友情链接</a>
 		</div>
-		<p>CopyRight © 2016 北京尚硅谷信息技术有限公司 All Rights Reserved</p>
+		<p>CopyRight © 2016 北京藏书阁信息技术有限公司 All Rights Reserved</p>
 		<p>电话：010-****888    京ICP备*******8号</p>
 	</div>
-
 {% endblock %}
 </body>
 </html>

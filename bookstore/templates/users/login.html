@@ -35,6 +35,10 @@
                     <div class="user_error">输入错误</div>
                     <input type="password" name="pwd" class="pass_input" placeholder="请输入密码" id="pwd">
                     <div class="pwd_error">输入错误</div>
+                    <div style="top: 100px;position: absolute;">
+                        <img id="verifycode" src="/users/verifycode/" alt="CheckCode">
+                        <input type="text" id="vc" name="vc">
+                    </div>
                     <div class="more_input clearfix">
                         <input id="remember" type="checkbox" name="remember" {{ checked }}>
                         <label>记住用户名</label>
@@ -51,11 +55,13 @@
         var username = $('#user_name').val();
         var password = $('#pwd').val();
         var remember = $('#remember').prop('checked');
-        console.log(remember);
+        var vc = $('input[name="vc"]').val();
+        console.log(vc);
         var data = {
             remember :remember,
             username:username,
             password:password,
+            'verifycode':vc,
             next_path:'/books/index/'
         };
     $.ajax(
@@ -71,7 +77,9 @@
                 alert("用户名和密码错误")
             }else if(res.res === 2){
                 alert("用户名或密码不能为空")
-            }else{
+            }else if (res.res === 6){
+                alert('验证码错误')
+            } else{
                 alert('登录失败')
             }
         },

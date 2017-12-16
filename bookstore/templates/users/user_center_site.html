@@ -2,50 +2,87 @@
 {% load staticfiles %}
 {% block title %}
 	<title>尚硅谷书城-用户中心</title>
-{% endblock %}
+{% endblock title %}
 {% block body %}
 
 	<div class="main_con clearfix">
 		<div class="left_menu_con clearfix">
 			<h3>用户中心</h3>
 			<ul>
-				<li><a href="user_center_info.html">· 个人信息</a></li>
-				<li><a href="user_center_order.html">· 全部订单</a></li>
-				<li><a href="user_center_site.html" class="active">· 收货地址</a></li>
+				<li><a href="{% url 'users:center' %}">· 个人信息</a></li>
+				<li><a href="{% url 'users:order' %}">· 全部订单</a></li>
+				<li><a href="{% url 'users:address' %}" class="active">· 收货地址</a></li>
 			</ul>
 		</div>
 		<div class="right_content clearfix">
 				<h3 class="common_title2">收货地址</h3>
 				<div class="site_con">
-					<dl>
+					<dl>  
 						<dt>当前地址：</dt>
-						<dd>北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>
-					</dl>					
+						<dd>{{ addr.recipient_addr }} （{{ addr.recipient_name }} 收） {{ addr.recipient_phone }}</dd>
+					</dl>
 				</div>
 				<h3 class="common_title2">编辑地址</h3>
-				<div class="site_con">
-					<form>
-						<div class="form_group">
-							<label>收件人：</label>
-							<input type="text" name="">
-						</div>
-						<div class="form_group form_group2">
-							<label>详细地址：</label>
-							<textarea class="site_area"></textarea>
-						</div>
-						<div class="form_group">
-							<label>邮编：</label>
-							<input type="text" name="">
-						</div>
-						<div class="form_group">
-							<label>手机：</label>
-							<input type="text" name="">
-						</div>
-
-						<input type="submit" name="" value="提交" class="info_submit">
-					</form>
-				</div>
+				<form method="post" action="/users/address/">
+				{% csrf_token %}
+					<div class="site_con">
+							<div class="form_group">
+							{% csrf_token %}
+								<label>收件人：</label>
+								<input type="text" name="username" id="user_name">
+							</div>
+							<div class="form_group form_group2">
+								<label>详细地址：</label>
+								<textarea class="site_area" id="addr" name="addr"></textarea>
+							</div>
+							<div class="form_group">
+								<label>邮编：</label>
+								<input type="text" name="zip_code" id="zip_code">
+							</div>
+							<div class="form_group">
+								<label>手机：</label>
+								<input type="text" name="phone" id="phone_num">
+							</div>
+							<input type="submit" name="" value="提交" class="info_submit" id="btn">
+					</div>
+				</form>
 		</div>
 	</div>
+<!-- <script type="text/javascript">
+$("#btn").click(function(){
+	var user_name = $("#user_name").val()
+	var addr = $("#addr").val()
+	var phone_num = $("#phone_num").val()
+	var zip_code = $("#zip_code").val()
+	csrf = $('input[name="csrfmiddlewaretoken"]').val();
+	// 做简单的数据判断
+	  if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone_num))){ 
+        alert("请确认手机好"); 
+        document.mobileform.mobile.focus(); 
+        return false; 
+    }else {
+    	data = {
+    		'username':user_name,
+    		'addr':addr,
+    		"phone":phone_num,
+    		'zip_code':zip_code,
+    		 "csrfmiddlewaretoken":csrf
 
+    	}
+    	$.post('/users/address/',data,function(data){
+    		if (data.res === 1) {
+    			alert(data.errormsg)
+    		}else if (data.res === 2) {
+    			alert("修改陈宫")
+
+    		}
+    	})
+    } 
+
+	//将获取用户填入的数据传入后端，做进一步处理
+})
+
+
+</script>
+ -->
 {% endblock %}

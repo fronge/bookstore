@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse,HttpResponse
 from django.core.urlresolvers import reverse
+from django_redis import get_redis_connection
+
+from books.models import Books
 from .models import Passport,Address
 from order.models import OrderInfo,OrderGoods
 import re
@@ -13,6 +16,10 @@ from itsdangerous import SignatureExpired
 from users.tasks import send_active_email
 from django.core.mail import send_mail
 from bookstore import settings
+# 绘制验证码
+from PIL import Image,ImageDraw,ImageFont
+import random
+import io
 
 # 注册页面
 def register(requset):
@@ -42,11 +49,10 @@ def register_hander(request):
 		# 生成激活的token itstangerous
 		serializer = Serializer(settings.SECRET_KEY, 3600)
 		token = serializer.dumps({'confirm': passport.id})
-		print(token)
 		token = token.decode()
 		# 给用户的邮箱发激活邮件
-		send_mail('尚硅谷书城-首页用户激活', '', settings.EMAIL_FROM, [email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
-		# send_active_email(token,username,email)
+		# send_mail('尚硅谷书城-首页用户激活', '', settings.EMAIL_FROM, [email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
+		send_active_email(token,username,email)
 		return JsonResponse({
 		'res': 1,
 		'code': 200
@@ -70,10 +76,15 @@ def login_check(request):
 	username = data.get('username','')
 	password = data.get('password','')
 	remember = data.get('remember','')
+	verifycode = data.get('verifycode','')
 	# 如果用户名或密码有空
-	if not all([username,password]):
+	if not all([username,password,verifycode]):
 		return JsonResponse({
 			'res':2
+		})
+	if verifycode.upper() != request.session['verifycode']:
+		return JsonResponse({
+			'res': 6
 		})
 	# url_path为了给session设置个路由,哪里来的，set_cookie 是JsonResponse的方法
 	next_url = request.session.get('url_path',reverse("books:index"))
@@ -103,12 +114,19 @@ def logout(request):
 	# 跳转到首页
 	return HttpResponseRedirect('/users/login/')
 
-@login_required
 def user(request):
 	"""用户中心－信息页"""
 	passport_id = request.session.get("passport_id")
 	addr = Address.objects.get_default_address(passport_id=passport_id)
+	con = get_redis_connection('default')
+	key = 'history_%d'%passport_id
+	# 取出用户最近浏览的五个商品的id
+	history_li = con.lrange(key,0,4)
 	books_li = []
+	for id in history_li:
+		books = Books.objects.filter(id=id)
+		print(type(books))
+		books_li.append(books)
 	context = {
 		"addr": addr,
 		"page": 'user',
@@ -126,41 +144,38 @@ def address(request):
 		# 显示地址页面
 		# 查询用户的默认地址
 		addr = Address.objects.get_default_address(passport_id=passport_id)
-		return render(request,'users/user_center_site.html',{'addr':addr,'page':'address'})
+		return render(request,'users/user_center_site.html',{'addr':addr})
+
 	else:
 		recipient_name = request.POST.get('username')
 		recipient_addr = request.POST.get('addr')
 		zip_code = request.POST.get('zip_code')
 		recipient_phone = request.POST.get('phone')
+		# 校验
+		if not all([recipient_name,recipient_addr,zip_code,recipient_phone]):
+			return render(request,'users/user_center_site.html',{"res":1,'errmsg':'参数不能为空'})
 
-	# 校验
-	if not all([recipient_name,recipient_addr,zip_code,recipient_phone]):
-		return render(request,'users/user_center_site.html',{'errmsg':'参数不能为空'})
-
-	# 添加收货地址
-	Address.objects.add_one_address(passport_id=passport_id,recipient_name=recipient_name,
-									recipient_addr=recipient_addr,
-									zip_code=zip_code,recipient_phone=recipient_phone)
-	print('address')
-	return redirect(reverse('users:address'))
+		# 添加收,货地址
+		Address.objects.add_one_address(passport_id=passport_id,recipient_name=recipient_name,
+										recipient_addr=recipient_addr,
+										zip_code=zip_code,recipient_phone=recipient_phone)
+		return redirect(reverse('users:address'))
 
 @login_required
 def order(request):
 	"""用户中心－订单页"""
 	passport_id = request.session.get('passport_id')
 	order_li = OrderInfo.objects.filter(passport_id=passport_id)
-
 	# 获取订单的商品信息
 	for order in order_li:
 		order_id = order.order_id
 		order_books_li = OrderGoods.objects.filter(order_id=order_id)
-
 		# 计算商品的小计
 		for order_books in order_books_li:
 			count = order_books.count
 			price = order_books.price
 			amount = count * price
-			# 保存订单中每个商品的而小计
+			# 保存订单中每个商品的小计
 			order_books.amount = amount
 
 		# 给order对象动态增加一个属性order_goods_li 保存订单中商品的信息
@@ -170,10 +185,64 @@ def order(request):
 		'order_li':order_li,
 		'page':'order'
 	}
-	print("user_center_order")
+	
 	return render(request,'users/user_center_order.html',context)
 
-@login_required
 def verifycode(request):
-	print("verifycode")
-	return render(request,'users/user_center_site.html')
+	"""绘制验证码"""
+	try:
+		# 定义一个变量，用于画面的背景色，宽，高
+		bgcolor = (random.randrange(20,100),random.randrange(20,100),255)
+		width = 100
+		height = 25
+		# 创建画面对象
+		im =  Image.new("RGB",(width,height),bgcolor)
+		# 撞见画笔对象
+		draw = ImageDraw.Draw(im)
+		# 调用画笔的point
+		for i in range(0,100):
+			xy = (random.randrange(0,width),random.randrange(0,height))
+			fill = (random.randrange(0,255),255,random.randrange(0,255))
+			draw.point(xy,fill=fill)
+		# 定义验证码的备选值
+		str1 = 'ABCD123EFGHIJK456LMNOPQRSTU78V9WSYZ0'
+		# 随机选取４个值作为验证码
+		rand_str = ''
+		for i in range(0,4):
+			rand_str += str1[random.randrange(0,len(str1))]
+		# 构造字体对象
+		font = ImageFont.truetype('/usr/share/fonts/truetype/fonts-japanese-gothic.ttf')
+		fontcolor = (255,random.randrange(0,255),random.randrange(0,255))
+		# 绘制4个字
+		draw.text((5,2),rand_str[0],font=font,fill=fontcolor)
+		draw.text((25,2),rand_str[1],font=font,fill=fontcolor)
+		draw.text((50,2),rand_str[2],font=font,fill=fontcolor)
+		draw.text((75,2),rand_str[3],font=font,fill=fontcolor)
+		# 释放画笔
+		del draw
+		# 存入session,用与做进一步的验证
+		request.session['verifycode'] = rand_str
+		# 内存文件操作
+		buf = io.BytesIO()
+		im.save(buf,"png")
+		# 将图片保存在内存中，文件类型为png
+		return HttpResponse(buf.getvalue(),'image/png')
+	except Exception as e:
+		print(e)
+		return render(request,'users/login.html')
+
+def register_active(request,token):
+	"""账户激活"""
+	serializer = Serializer(settings.SECRET_KEY,3600)
+	try:
+		info = serializer.loads(token)
+		passport_id = info['confirm']
+		#进行用户激活
+		passport = Passport.objects.get(id=passport_id)
+		passport.is_active = True
+		passport.save()
+		#跳转页面到登录页面
+		return redirect(reverse('user:login'))
+	except SignatureExpired:
+		return HttpResponse("激活链接已过期")
+

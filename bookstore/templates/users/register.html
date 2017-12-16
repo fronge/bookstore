@@ -3,7 +3,7 @@
 {% block body %}
 	<div class="register_con">
 		<div class="l_con fl">
-			<a class="reg_logo"><img src="/static/images/logo.png" style="width: 160px; height: 53px;"></a>
+			<a class="reg_logo"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
 			<div class="reg_slogan">学计算机  ·  来尚硅谷</div>
 			<div class="reg_banner"></div>
 		</div>
@@ -67,11 +67,11 @@
             $.ajax({
                 data:JSON.stringify(data),
                 type:"POST",
-                url:"register_hander",
+                url:"/users/register_hander/",
                 traditional:true,
                 success:function (res) {
                     if(res.res===1){
-                        location.href='login';
+                        location.href='/users/login/';
                     }else if (res.res===2){
                         alert('内容不能为空');
                     }else if (res.res===3){

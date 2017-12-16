@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-#ａｄｍｉｎ的用户　admin  密码：admin123
+#ａｄｍｉｎ的用户　admin123  密码：admin123
 
 import os
 
@@ -26,7 +26,7 @@ SECRET_KEY = '5hos_=+c1oj_g79a%+htevk+8z)l48nmh5u2+nv74)d249^dv+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.14.27',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -42,13 +42,17 @@ INSTALLED_APPS = [
     'books',#商品
     'tinymce',#富文本编辑器
     'comments',
+    'cart',
+    'order',
+    'haystack',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -132,7 +136,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
 
+#媒体存入的根目录，设置存储图片的目录
 MEDIA_ROOT=os.path.join(BASE_DIR,'static')
+
+
+#配置发送邮件的功能
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+# 发件人的用户密码
+EMAIL_HOST_USER = 'Z_frange@163.com'
+EMAIL_HOST_PASSWORD = '123456zfg'
+# 收件人看到的发件人
+EMAIL_FROM = 'dailyfresh<Z_frange@163.com>'
+
 
 # 设置副文本编辑器的样式
 TINYMCE_DEFAULT_CONFIG = {
@@ -140,10 +157,11 @@ TINYMCE_DEFAULT_CONFIG = {
     'width':600,
     'heigh':400,
 }
-
 # 是否给URL添加一个结尾的斜线，只有安装了CommonMiddleware之后才会起作用
 APPEND_SLASH=True
 
+
+# 设置缓存
 CACHES = {
     'default':{
         'BACKEND':'django_redis.cache.RedisCache',
@@ -154,7 +172,6 @@ CACHES = {
         }
     }
 }
-
 # 简单的缓存会话存储　，　提升了速度，但是放弃了持久性，会话数据有丢失的风险
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # 持久的缓存数据，每次的缓存都会写入到数据库，会占掉一些性能，但是会保证缓存数据的安全性
@@ -164,3 +181,20 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # SESSION_FILE_PATH 可以用来控制django在哪里存储会话文件，默认为tempile.gettempdir()的输出，
 # 大部分情况为/tmp,但是需要保证，有读写权限
 SESSION_CACHE_ALIAS = 'default'
+
+#全文检索配置
+HAYSTACK_CONNECTIONS = {
+    'default':{
+    # 使用whoosh引擎
+    "ENGINE":'haystack.backends.whoosh_backend.WhooshEngine',
+    # 索引文件路径
+    'PATH': os.path.join(BASE_DIR,'whoosh_index'),
+    }
+}
+
+# 当添加，修改，删除数据时，自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+# 制定搜索结果每页的条数
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6
+
+ALPAY_URL='https://openapi.alipaydev.com/gateway.do'

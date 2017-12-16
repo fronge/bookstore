@@ -62,8 +62,8 @@
                     {% for book in books_li %}
                     <li>
                         <a href="{% url 'books:detail' books_id=book.id %}"><img src="{% static book.image %}"></a>
-                        <h4><a href="{% url 'books:detail' books_id=book.id %}">{{ book.name }}</a></h4>
-                        <div class="prize">￥{{ book.price }}</div>
+                        <h4><a href="{% url 'books:detail' books_id=book.id %}">{{ book.name | safe }}</a></h4>
+                        <div class="prize">￥{{ book.price | safe }}</div>
                     </li>
                     {% endfor %}
                 </ul>
@@ -85,25 +85,23 @@
         </div>
     </div>
   <div class="add_jump"></div>
-<!-- <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script> -->
-
 <script type="text/javascript">
    //将评论输入的隐藏
   $('#comment-input').hide();
 
  $(function(){
-    update_total_price()
+    update_total_price();
     //计算总价钱
     function update_total_price(){
       //获取商品数量
-      books_count　=　$('.num_show').val()
+      books_count　=　$('.num_show').val();
       //单价
-      books_price = $('.show_pirce').children('em').text()
+      books_price = $('.show_pirce').children('em').text();
       //计算总价
-      books_price = parseFloat(books_price)
-      books_count　= parseInt(books_count)
-      //商品总价
-      total_price = books_price * books_count
+      books_price = parseFloat(books_price);
+      books_count　= parseInt(books_count);
+      //商品总价;
+      total_price = books_price * books_count;
       //设置显示商品的总价
       $('.total').children('em').html(total_price.toFixed(2)+'元')
     }
@@ -111,28 +109,28 @@
     //商品增加
     $('.add').click(function(){
       //获取添加商品的数量
-      books_count = parseInt($('.num_show').val())
-      books_count　+= 1
-      $('.num_show').val(books_count)
+      books_count = parseInt($('.num_show').val());
+      books_count　+= 1;
+      $('.num_show').val(books_count);
       if (books_count>0) {
         $('.minus').show()
       }
-    })
+    });
     //减少商品
     $('.minus').click(function(){
-      books_count = parseInt($('.num_show').val())
-      console.log(books_count)
+      books_count = parseInt($('.num_show').val());
+      console.log(books_count);
 
       if (books_count>0) {
-        books_count　-= 1
+        books_count　-= 1;
         $('.num_show').val(books_count)
       }else{
-        $('.minus').hide()
+        $('.minus').hide();
         alert('未添加商品')
       }
       
     })
-  })
+  });
         
 
     var $add_x = $("#add_cart").offset().top;
@@ -148,7 +146,7 @@
         books_id = $(this).attr('books_id');
         books_count = $(".num_show").val();
         // 这个值从哪来的？
-        csrf = $('input[name="csrfmiddlewaretoken"]').val()
+        csrf = $('input[name="csrfmiddlewaretoken"]').val();
         //发起请求
         params = {
             'books_id' : books_id,
@@ -168,7 +166,7 @@
                   $('.add_jump').fadeOut('fast',function () {
                       //获取原有show_count的值
                       count = $('#show_count').html();
-                      count = parseInt(count) + parseInt(books_count)
+                      count = parseInt(count) + parseInt(books_count);
                       //将更新后的物品值显示出来
                       $('#show_count').html(count)
                   });
@@ -254,8 +252,24 @@
        })
     })
 
-
-
 </script>
+
+<style type="text/css">
+    .comment{
+        background-color: #c40000;
+        color: #fff;
+        margin-left: 10px;
+        position: relative;
+        z-index: 10;
+        display: inline-block;
+        width: 178px;
+        height: 38px;
+        border: 1px solid #c40000;
+        font-size: 14px;
+        line-height: 38px;
+        text-align: center;
+    }
+
+    </style>
 {% endblock body %}
 

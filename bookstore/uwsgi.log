@@ -1,0 +1,103 @@
+*** Starting uWSGI 2.0.15 (64bit) on [Fri Dec 15 11:44:17 2017] ***
+compiled with version: 5.4.0 20160609 on 15 December 2017 10:30:27
+os: Linux-4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017
+nodename: ubuntu
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 4
+current working directory: /home/atguigu/workspace/1204书城项目/bookstore
+writing pidfile to uwsgi.pid
+detected binary path: /home/atguigu/.virtualenvs/py3/bin/uwsgi
+chdir() to /home/atguigu/workspace/1204书城项目/bookstore/bookstore
+your processes number limit is 11776
+your memory page size is 4096 bytes
+detected max file descriptor number: 65536
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8000 fd 3
+Python version: 3.5.2 (default, Nov 23 2017, 16:37:01)  [GCC 5.4.0 20160609]
+Set PythonHome to /home/atguigu/py3
+Fatal Python error: Py_Initialize: Unable to get the locale encoding
+ImportError: No module named 'encodings'
+
+Current thread 0x00007fd4da8cc700 (most recent call first):
+*** Starting uWSGI 2.0.15 (64bit) on [Fri Dec 15 11:58:37 2017] ***
+compiled with version: 5.4.0 20160609 on 15 December 2017 10:30:27
+os: Linux-4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017
+nodename: ubuntu
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 4
+current working directory: /home/atguigu/workspace/1204书城项目/bookstore
+writing pidfile to uwsgi.pid
+detected binary path: /home/atguigu/.virtualenvs/py3/bin/uwsgi
+chdir() to /home/atguigu/workspace/1204书城项目/bookstore
+your processes number limit is 11776
+your memory page size is 4096 bytes
+detected max file descriptor number: 65536
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:9001 fd 3
+Python version: 3.5.2 (default, Nov 23 2017, 16:37:01)  [GCC 5.4.0 20160609]
+Set PythonHome to /home/atguigu/py3
+Fatal Python error: Py_Initialize: Unable to get the locale encoding
+ImportError: No module named 'encodings'
+
+Current thread 0x00007f8b38812700 (most recent call first):
+*** Starting uWSGI 2.0.15 (64bit) on [Fri Dec 15 13:54:08 2017] ***
+compiled with version: 5.4.0 20160609 on 15 December 2017 10:30:27
+os: Linux-4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017
+nodename: ubuntu
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 4
+current working directory: /home/atguigu/workspace/1204书城项目/bookstore
+writing pidfile to uwsgi.pid
+detected binary path: /home/atguigu/.virtualenvs/py3/bin/uwsgi
+chdir() to /home/atguigu/workspace/1204书城项目/bookstore
+your processes number limit is 11776
+your memory page size is 4096 bytes
+detected max file descriptor number: 65536
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8000 fd 3
+Python version: 3.5.2 (default, Nov 23 2017, 16:37:01)  [GCC 5.4.0 20160609]
+Set PythonHome to /home/atguigu/.virtualenvs/py3/
+Python main interpreter initialized at 0x8c8e80
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 415280 bytes (405 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+unable to load app 0 (mountpoint='') (callable not found or import error)
+WSGI app 0 (mountpoint='') ready in 5 seconds on interpreter 0x8c8e80 pid: 7892 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 7892)
+spawned uWSGI worker 1 (pid: 7903, cores: 2)
+spawned uWSGI worker 2 (pid: 7904, cores: 2)
+spawned uWSGI worker 3 (pid: 7907, cores: 2)
+spawned uWSGI worker 4 (pid: 7909, cores: 2)
+[pid: 7907|app: 0|req: 1/1] 127.0.0.1 () {44 vars in 856 bytes} [Fri Dec 15 05:59:02 2017] GET /users/login/ => generated 5604 bytes in 2723 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 7903|app: 0|req: 1/2] 127.0.0.1 () {44 vars in 856 bytes} [Fri Dec 15 05:59:07 2017] GET /users/login/ => generated 5604 bytes in 346 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 7904|app: 0|req: 1/3] 127.0.0.1 () {42 vars in 804 bytes} [Fri Dec 15 05:59:07 2017] GET /users/verifycode/ => generated 1223 bytes in 428 msecs (HTTP/1.1 200) 5 headers in 240 bytes (1 switches on core 0)
+[pid: 7903|app: 0|req: 2/4] 127.0.0.1 () {50 vars in 992 bytes} [Fri Dec 15 06:01:54 2017] POST /users/login_check/ => generated 39 bytes in 582 msecs (HTTP/1.1 200) 6 headers in 329 bytes (1 switches on core 1)
+[pid: 7903|app: 0|req: 3/5] 127.0.0.1 () {44 vars in 875 bytes} [Fri Dec 15 06:01:54 2017] GET /books/index/ => generated 14058 bytes in 341 msecs (HTTP/1.1 200) 6 headers in 192 bytes (1 switches on core 0)
+<class 'django.db.models.query.QuerySet'>
+<class 'django.db.models.query.QuerySet'>
+<class 'django.db.models.query.QuerySet'>
+<class 'django.db.models.query.QuerySet'>
+<class 'django.db.models.query.QuerySet'>
+[pid: 7907|app: 0|req: 2/6] 127.0.0.1 () {44 vars in 877 bytes} [Fri Dec 15 06:02:03 2017] GET /users/center/ => generated 5195 bytes in 152 msecs (HTTP/1.1 200) 4 headers in 124 bytes (1 switches on core 1)
+[pid: 7904|app: 0|req: 2/7] 127.0.0.1 () {44 vars in 880 bytes} [Fri Dec 15 06:02:08 2017] GET /users/address/ => generated 5787 bytes in 62 msecs (HTTP/1.1 200) 5 headers in 278 bytes (1 switches on core 1)
+[pid: 7903|app: 0|req: 4/8] 127.0.0.1 () {48 vars in 933 bytes} [Fri Dec 15 06:06:40 2017] GET /users/address/ => generated 5787 bytes in 18 msecs (HTTP/1.1 200) 5 headers in 278 bytes (1 switches on core 1)
+[pid: 7907|app: 0|req: 3/9] 127.0.0.1 () {48 vars in 930 bytes} [Fri Dec 15 06:09:59 2017] GET /users/order/ => generated 3976 bytes in 52 msecs (HTTP/1.1 200) 5 headers in 278 bytes (1 switches on core 0)
+[pid: 7904|app: 0|req: 3/10] 127.0.0.1 () {48 vars in 930 bytes} [Fri Dec 15 12:12:56 2017] GET /books/index/ => generated 14058 bytes in 217 msecs (HTTP/1.1 200) 6 headers in 192 bytes (1 switches on core 0)
+SIGINT/SIGQUIT received...killing workers...
+worker 1 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 4 buried after 1 seconds
+goodbye to uWSGI.

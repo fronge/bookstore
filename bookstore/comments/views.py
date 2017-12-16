@@ -10,7 +10,6 @@ import json
 def comment(request,book_id):
 	if request.method == "GET":
 		comments = Comments.objects.filter(book_id=book_id)
-		print(comments)
 		res = []
 		for c in comments:
 			res.append({
@@ -18,7 +17,6 @@ def comment(request,book_id):
 				"user_id":c.user_id,
 				"content":c.content,
 			})
-		print(res)
 		return JsonResponse({
 			'code':200,
 			'data':res,

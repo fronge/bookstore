@@ -7,7 +7,7 @@ def login_required(view_func):
 		if request.session.has_key('login_line'):
 			return view_func(request,*args,**kwargs)
 		else:
-			return HttpResponseRedirect('/user/login/')
+			return HttpResponseRedirect('/users/login/')
 
 
 	return wrapper

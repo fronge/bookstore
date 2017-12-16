@@ -1,6 +1,9 @@
 from django.shortcuts import render,HttpResponseRedirect
+from django_redis import get_redis_connection
+
 from .models import Books
 from .enums import *
+from utils.decorators import login_required
 from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
 # Create your views here.
@@ -8,7 +11,6 @@ from django.views.decorators.cache import cache_page
 @cache_page(60 * 1)
 def index(request):
 	'''显示首页'''
-	print(11111)
 	# 查询每个种类的3个新品信息和4个销量最好的商品信息
 	python_new = Books.objects.get_books_by_type(PYTHON, 3, sort='new')
 	python_hot = Books.objects.get_books_by_type(PYTHON, 4, sort='hot')
@@ -22,7 +24,6 @@ def index(request):
 	operatingsystem_hot = Books.objects.get_books_by_type(OPERATINGSYSTEM, 4, sort='hot')
 	database_new = Books.objects.get_books_by_type(DATABASE, 3, sort='new')
 	database_hot = Books.objects.get_books_by_type(DATABASE, 4, sort='hot')
-	print(database_hot)
 	# 定义模板上下文
 	context = {
 		'python_new': python_new,
@@ -40,7 +41,7 @@ def index(request):
 	}
 	return render(request,"books/index.html", context=context)
 
-
+@login_required
 def detail(request,books_id):
 	"""商品详情"""
 	books = Books.objects.get_books_by_id(books_id =books_id)
@@ -49,13 +50,24 @@ def detail(request,books_id):
 		return HttpResponseRedirect('books:index')
 	# 新品推荐
 	books_li = Books.objects.get_books_by_type(type_id=books.type_id,limit=2,sort='new')
-	return render(request,'books/detail.html',{"books":books,"books_li":books_li})
+	if request.session.has_key('login_line'):
+		con = get_redis_connection('default')
+		key = 'history_%d'%request.session.get('passport_id')
+		# 先从redis中移除books.id
+		con.lrem(key,0,books.id)
+		#向redis中加入books.id
+		con.lpush(key,books.id)
+		# 保存用户最近浏览的5个商品
+		con.ltrim(key,0,4)
+	# 定义上下文
+	context = {"books":books,"books_li":books_li}
+	return render(request,'books/detail.html',context)
 
+@login_required
 @cache_page(60 * 5)
 def list(request,type_id,page):
 	"""商品列表页面"""
 	sort = request.GET.get('sort','default')
-	print(sort)
 	if int(type_id) not in BOOK_TYPE.keys():
 		return HttpResponseRedirect('books/index')
 	books_li = Books.objects.get_books_by_type(type_id=type_id,sort=sort)
