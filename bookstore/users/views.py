@@ -205,13 +205,13 @@ def verifycode(request):
 			fill = (random.randrange(0,255),255,random.randrange(0,255))
 			draw.point(xy,fill=fill)
 		# 定义验证码的备选值
-		str1 = 'ABCD123EFGHIJK456LMNOPQRSTU78V9WSYZ0'
+		str1 = 'ABCD123EFGHIJK456LMNPQRSTU78V9WSYZ0'
 		# 随机选取４个值作为验证码
 		rand_str = ''
 		for i in range(0,4):
 			rand_str += str1[random.randrange(0,len(str1))]
 		# 构造字体对象
-		font = ImageFont.truetype('/usr/share/fonts/truetype/fonts-japanese-gothic.ttf')
+		font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf')
 		fontcolor = (255,random.randrange(0,255),random.randrange(0,255))
 		# 绘制4个字
 		draw.text((5,2),rand_str[0],font=font,fill=fontcolor)
