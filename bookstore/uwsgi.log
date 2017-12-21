@@ -101,3 +101,125 @@ worker 2 buried after 1 seconds
 worker 3 buried after 1 seconds
 worker 4 buried after 1 seconds
 goodbye to uWSGI.
+*** Starting uWSGI 2.0.15 (64bit) on [Sun Dec 17 10:45:09 2017] ***
+compiled with version: 5.4.0 20160609 on 15 December 2017 10:30:27
+os: Linux-4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017
+nodename: ubuntu
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 4
+current working directory: /home/atguigu/workspace/1204书城项目/bookstore
+writing pidfile to uwsgi.pid
+detected binary path: /home/atguigu/.virtualenvs/py3/bin/uwsgi
+chdir() to /home/atguigu/workspace/1204书城项目/bookstore
+your processes number limit is 11776
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8000 fd 3
+Python version: 3.5.2 (default, Nov 23 2017, 16:37:01)  [GCC 5.4.0 20160609]
+Set PythonHome to /home/atguigu/.virtualenvs/py3/
+Python main interpreter initialized at 0x1014b60
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 415280 bytes (405 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+unable to load app 0 (mountpoint='') (callable not found or import error)
+WSGI app 0 (mountpoint='') ready in 6 seconds on interpreter 0x1014b60 pid: 5324 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 5324)
+spawned uWSGI worker 1 (pid: 5335, cores: 2)
+spawned uWSGI worker 2 (pid: 5336, cores: 2)
+spawned uWSGI worker 3 (pid: 5337, cores: 2)
+spawned uWSGI worker 4 (pid: 5340, cores: 2)
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+invalid request block size: 21573 (max 4096)...skip
+Not Found: /favicon.ico
+[pid: 5337|app: 0|req: 2/1] 127.0.0.1 () {42 vars in 792 bytes} [Sun Dec 17 02:46:00 2017] GET /favicon.ico => generated 2718 bytes in 389 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 1)
+[pid: 5337|app: 0|req: 2/2] 127.0.0.1 () {42 vars in 825 bytes} [Sun Dec 17 02:45:58 2017] GET /users/login/ => generated 5662 bytes in 2807 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 4 (pid: 5340)...
+Gracefully killing worker 2 (pid: 5336)...
+Gracefully killing worker 1 (pid: 5335)...
+Gracefully killing worker 3 (pid: 5337)...
+worker 1 buried after 2 seconds
+worker 2 buried after 2 seconds
+worker 3 buried after 2 seconds
+worker 4 buried after 2 seconds
+binary reloading uWSGI...
+chdir() to /home/atguigu/workspace/1204书城项目/bookstore
+closing all non-uwsgi socket fds > 2 (max_fd = 1024)...
+found fd 3 mapped to socket 0 (127.0.0.1:8000)
+running /home/atguigu/.virtualenvs/py3/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+*** Starting uWSGI 2.0.15 (64bit) on [Sun Dec 17 02:46:46 2017] ***
+compiled with version: 5.4.0 20160609 on 15 December 2017 10:30:27
+os: Linux-4.10.0-42-generic #46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017
+nodename: ubuntu
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 4
+current working directory: /home/atguigu/workspace/1204书城项目/bookstore
+detected binary path: /home/atguigu/.virtualenvs/py3/bin/uwsgi
+chdir() to /home/atguigu/workspace/1204书城项目/bookstore
+your processes number limit is 11776
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited INET address 127.0.0.1:8000 fd 3
+Python version: 3.5.2 (default, Nov 23 2017, 16:37:01)  [GCC 5.4.0 20160609]
+Set PythonHome to /home/atguigu/.virtualenvs/py3/
+Python main interpreter initialized at 0xdca410
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 415280 bytes (405 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+unable to load app 0 (mountpoint='') (callable not found or import error)
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0xdca410 pid: 5324 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 5324)
+spawned uWSGI worker 1 (pid: 5544, cores: 2)
+spawned uWSGI worker 2 (pid: 5545, cores: 2)
+spawned uWSGI worker 3 (pid: 5547, cores: 2)
+spawned uWSGI worker 4 (pid: 5549, cores: 2)
+[pid: 5545|app: 0|req: 1/1] 127.0.0.1 () {44 vars in 856 bytes} [Sun Dec 17 02:46:48 2017] GET /users/login/ => generated 5662 bytes in 291 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 5545|app: 0|req: 2/2] 127.0.0.1 () {42 vars in 804 bytes} [Sun Dec 17 02:46:48 2017] GET /users/verifycode/ => generated 1466 bytes in 36 msecs (HTTP/1.1 200) 5 headers in 240 bytes (1 switches on core 1)
+[pid: 5545|app: 0|req: 3/3] 127.0.0.1 () {50 vars in 992 bytes} [Sun Dec 17 02:47:09 2017] POST /users/login_check/ => generated 39 bytes in 112 msecs (HTTP/1.1 200) 6 headers in 329 bytes (1 switches on core 0)
+[pid: 5545|app: 0|req: 4/4] 127.0.0.1 () {44 vars in 875 bytes} [Sun Dec 17 02:47:09 2017] GET /books/index/ => generated 14117 bytes in 106 msecs (HTTP/1.1 200) 6 headers in 192 bytes (1 switches on core 1)
+[pid: 5545|app: 0|req: 5/5] 127.0.0.1 () {44 vars in 881 bytes} [Sun Dec 17 02:47:19 2017] GET /cart/cart_show/ => generated 14339 bytes in 17 msecs (HTTP/1.1 200) 5 headers in 279 bytes (1 switches on core 0)
+[pid: 5547|app: 0|req: 1/6] 127.0.0.1 () {44 vars in 808 bytes} [Sun Dec 17 02:47:19 2017] GET /cart/cart_count/ => generated 10 bytes in 278 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 5544|app: 0|req: 1/7] 127.0.0.1 () {50 vars in 985 bytes} [Sun Dec 17 02:47:21 2017] POST /cart/cart_del/ => generated 10 bytes in 186 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 5549|app: 0|req: 1/8] 127.0.0.1 () {44 vars in 808 bytes} [Sun Dec 17 02:47:22 2017] GET /cart/cart_count/ => generated 10 bytes in 285 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 5549|app: 0|req: 2/9] 127.0.0.1 () {50 vars in 993 bytes} [Sun Dec 17 02:47:25 2017] POST /cart/cart_update/ => generated 10 bytes in 12 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 1)
+[pid: 5545|app: 0|req: 6/10] 127.0.0.1 () {44 vars in 808 bytes} [Sun Dec 17 02:47:25 2017] GET /cart/cart_count/ => generated 10 bytes in 1 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 1)
+[pid: 5545|app: 0|req: 7/11] 127.0.0.1 () {50 vars in 993 bytes} [Sun Dec 17 02:47:27 2017] POST /cart/cart_update/ => generated 10 bytes in 4 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 5547|app: 0|req: 2/12] 127.0.0.1 () {44 vars in 808 bytes} [Sun Dec 17 02:47:27 2017] GET /cart/cart_count/ => generated 10 bytes in 2 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 1)
+[pid: 5544|app: 0|req: 2/13] 127.0.0.1 () {50 vars in 993 bytes} [Sun Dec 17 02:47:30 2017] POST /cart/cart_update/ => generated 10 bytes in 7 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 1)
+[pid: 5544|app: 0|req: 3/14] 127.0.0.1 () {44 vars in 808 bytes} [Sun Dec 17 02:47:30 2017] GET /cart/cart_count/ => generated 10 bytes in 1 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+Internal Server Error: /order/place/
+Traceback (most recent call last):
+  File "/home/atguigu/.virtualenvs/py3/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/atguigu/.virtualenvs/py3/lib/python3.5/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view utils.decorators.wrapper didn't return an HttpResponse object. It returned None instead.
+[pid: 5547|app: 0|req: 3/15] 127.0.0.1 () {52 vars in 1060 bytes} [Sun Dec 17 02:47:35 2017] POST /order/place/ => generated 53498 bytes in 104 msecs (HTTP/1.1 500) 4 headers in 129 bytes (1 switches on core 0)
+[pid: 5544|app: 0|req: 4/16] 127.0.0.1 () {44 vars in 881 bytes} [Sun Dec 17 02:47:48 2017] GET /cart/cart_show/ => generated 13520 bytes in 50 msecs (HTTP/1.1 200) 5 headers in 279 bytes (1 switches on core 1)
+SIGINT/SIGQUIT received...killing workers...
+worker 1 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 4 buried after 1 seconds
+goodbye to uWSGI.

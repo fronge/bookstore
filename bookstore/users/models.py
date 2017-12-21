@@ -43,28 +43,29 @@ class AddressManger(models.Manager):
 	def get_default_address(self,passport_id):
 		try:
 			# 判断是否有默认地址
-			addr = self.get(passport_id=passport_id,is_default=True)
+			addr = self.filter(passport_id=passport_id,is_default=True).order_by('-create_time')[0]
 		#没有默认地址
 		except self.model.DoesNotExist:
 			addr = None
 		return addr
 
 	# 增加一个用户收货信息
-	def add_one_address(self, passport_id, recipient_name, recipient_addr, zip_code, recipient_phone):
+	def add_one_address(self, passport_id, recipient_name, recipient_addr, zip_code, recipient_phone,is_def):
 		addr = self.get_default_address(passport_id=passport_id)
-		if addr:
-			is_default = False
-		else:
+
+		if not addr:
 			is_default = True
+
 		addr = self.create(
 						passport_id=passport_id,
 						recipient_name=recipient_name,
 						recipient_addr=recipient_addr,
 						recipient_phone=recipient_phone,
 						zip_code=zip_code,
-						is_default=is_default
+						is_default=is_def
 						)
 		return addr
+
 
 
 class Passport(BaseModel):
@@ -94,3 +95,4 @@ class Address(BaseModel):
 
 	class Meta:
 		db_table = "s_user_address"
+		ordering = ['create_time']

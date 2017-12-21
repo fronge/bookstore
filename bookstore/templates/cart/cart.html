@@ -29,9 +29,9 @@
 	</ul>
     <form method="post" action="/order/place/">
             {% csrf_token %}
-    {% for book in books_li %}
+        {% for book in books_li %}
         <ul class="cart_list_td clearfix">
-            <li class="col01"><input type="checkbox" name="" checked></li>
+            <li class="col01"><input type="checkbox" name="books_ids" value='{{ book.id }}' checked></li>
             <li class="col02"><img src="{% static book.image %}"></li>
             <li class="col03">{{ book.name }}<br><em>{{ book.price }}元/{{ book.unit }}</em></li>
             <li class="col04">{{ book.unit }}</li>
@@ -52,7 +52,7 @@
 		<li class="col01"><input type="checkbox" name="" checked=""></li>
 		<li class="col02">全选</li>
 		<li class="col03">合计(不含运费)：<span>¥</span><em></em><br>共计<b></b>件商品</li>
-		<li class="col04"><input type="submit" value="去结算"></li>
+		<li class="col04"><input type="submit" value="去结算" id="sub"></li>
 	</ul>
    </form>
 <script>
@@ -166,7 +166,6 @@
             books_count = $(this).next().val();
             books_id = $(this).next().attr('books_id');
 
-
             //更新购物车信息
             books_count = parseInt(books_count) + 1;
             update_remote_cart_info(books_id,books_count);
@@ -232,12 +231,36 @@
          //购物车商品数目的手动输入 blur :失焦事件
         $('.num_show').blur(function () {
             //获取商品的数目和商品的id
-            pre_books_count = $(this).val();
+            books_count = $(this).val();
             books_id = $(this).attr('books_id');
 
             //校验用户输入的商品总数
-            if (isNaN(pre_books_count) || pre_books_count.trim().length <= 0 || parseInt(pre_books_count)<= 0){
+            if (isNaN(books_count) || books_count.trim().length <= 0 || parseInt(books_count)<= 0){
                 //设置回输入之间的值
+                $(this).val(pre_books_count)
+                return
+            }
+
+            //update shoppingCar 
+            books_count = parseInt(books_count)
+            update_remote_cart_info(books_id,books_count)
+
+            //do someting with result of update
+            if (error_update==false){
+                //seccessful for update
+                $(this).val(books_count)
+                //get checkbox of bookshop
+                is_checked = $(this).parents('ul').find(':checkbox').prop('checked')
+                if (is_checked) {
+                    //update counts of all the shoppings 
+                    update_total_price()
+                }else{
+                    //update shpings little_counts_price
+                    update_books_price($(this).parents('ul'))
+                }
+                //
+                update_cart_count()
+            }else{
                 $(this).val(pre_books_count)
             }
         });
@@ -268,6 +291,11 @@
         update_cart_count();
         update_total_price()
 
+
+        //submit to shoping
+        // $('#sub').click(function(){
+        //     $('.cart_list_td').find(':checked').
+        // })
     })
 
 

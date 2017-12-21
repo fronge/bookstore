@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}
-	<title>尚硅谷书城-用户中心</title>
+    <title>尚硅谷书城-用户中心</title>
 {% endblock title %}
 
     {% block search_bar %}
-	<div class="search_bar clearfix">
-		<a href="{% url 'books:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
-		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
-		<div class="search_con fr">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>
-	</div>
+    <div class="search_bar clearfix">
+        <a href="{% url 'books:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
+        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+        <div class="search_con fr">
+            <input type="text" class="input_text fl" name="" placeholder="搜索商品">
+            <input type="button" class="input_btn fr" name="" value="搜索">
+        </div>
+    </div>
 {% endblock search_bar %}
 
 
@@ -20,14 +20,14 @@
 {% block body %}
 
     <div class="main_con clearfix">
-		<div class="left_menu_con clearfix">
-			<h3>用户中心</h3>
-			<ul>
-				<li><a href="{% url 'users:center' %}" class="active">个人信息</a></li>
-				<li><a href="{% url 'users:order' %}">全部订单</a></li>
-				<li><a href="{% url 'users:address' %}">收货地址</a></li>
-			</ul>
-		</div>
+        <div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <ul>
+                <li><a href="{% url 'users:center' %}" class="active">个人信息</a></li>
+                <li><a href="{% url 'users:order' %}">全部订单</a></li>
+                <li><a href="{% url 'users:address' %}">收货地址</a></li>
+            </ul>
+        </div>
 
     <div class="right_content clearfix">
         {% csrf_token %}
@@ -60,15 +60,15 @@
                 </tbody>
             </table>
             {% endfor %}
- 				<div class="pagenation">
-					<a href="#">＜上一页</a>
-					<a href="#" class="active">1</a>
-					<a href="#">2</a>
-					<a href="#">3</a>
-					<a href="#">4</a>
-					<a href="#">5</a>
-					<a href="#">下一页＞</a>
-				</div>
+                <div class="pagenation">
+                    <a href="#">＜上一页</a>
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#">下一页＞</a>
+                </div>
     </div>
 </div>
 {% endblock body %}
