@@ -3,7 +3,37 @@
 {% block title %}
 	<title>尚硅谷书城-用户中心</title>
 {% endblock title %}
+
 {% block body %}
+					<style>
+/* 下拉按钮样式 */
+.dropbtn {
+    
+    border: none;
+    cursor: pointer;
+}
+
+/* 容器 <div> - 需要定位下拉内容 */
+.dropdown {
+	width: 200px;
+    position: relative;
+    display: inline-block;
+}
+
+/* 下拉内容 (默认隐藏) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+
+}
+/* 在鼠标移上去后显示下拉菜单 */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+</style>
 
 	<div class="main_con clearfix">
 		<div class="left_menu_con clearfix">
@@ -19,70 +49,93 @@
 				<div class="site_con">
 					<dl>  
 						<dt>当前地址：</dt>
-						<dd>{{ addr.recipient_addr }} （{{ addr.recipient_name }} 收） {{ addr.recipient_phone }}</dd>
+						<dd>
+							<span id="recv_name">收货人：{{ addr.recipient_name }} </span> 
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<span id="recv_addr">收货地址：{{ addr.recipient_addr }}</span>
+							 &nbsp;&nbsp;&nbsp;&nbsp;
+							 <span id="recv_phone">联系电话：{{ addr.recipient_phone }}</span>
+						</dd>
 					</dl>
-				</div>
-				<h3 class="common_title2">编辑地址</h3>
-				<form method="post" action="/users/address/">
+
+
+
+<div class="dropdown">
+  <button class="dropbtn">change address</button>
+  <div class="dropdown-content">
+  	{% for add in addr_li %}
+  	<dd>
+  		<span>收货人：{{ add.recipient_name }} </span> 
+  		&nbsp;&nbsp;&nbsp;&nbsp;
+  		<span>收货地址：{{ add.recipient_addr }} </span> 
+  		&nbsp;&nbsp;&nbsp;&nbsp;
+  		<span>联系电话：{{ add.recipient_phone }}</span>
+  	</dd>
+    {% endfor %}
+  </div>
+</div>
+		</div>
+			<h3 class="common_title2">编辑地址</h3>
+				<!-- <form method="post" action="/users/address/"> -->
+			{% csrf_token %}
+			<div class="site_con">
+				<div class="form_group">
 				{% csrf_token %}
-					<div class="site_con">
-							<div class="form_group">
-							{% csrf_token %}
-								<label>收件人：</label>
-								<input type="text" name="username" id="user_name">
-							</div>
-							<div class="form_group form_group2">
-								<label>详细地址：</label>
-								<textarea class="site_area" id="addr" name="addr"></textarea>
-							</div>
-							<div class="form_group">
-								<label>邮编：</label>
-								<input type="text" name="zip_code" id="zip_code">
-							</div>
-							<div class="form_group">
-								<label>手机：</label>
-								<input type="text" name="phone" id="phone_num">
-							</div>
-							<input type="submit" name="" value="提交" class="info_submit" id="btn">
-					</div>
-				</form>
+					<label>收件人：</label>
+					<input type="text" name="username" id="user_name">
+				</div>
+				<div class="form_group form_group2">
+					<label>详细地址：</label>
+					<textarea class="site_area" id="addr" name="addr"></textarea>
+				</div>
+				<div class="form_group">
+					<label>邮编：</label>
+					<input type="text" name="zip_code" id="zip_code">
+				</div>
+				<div class="form_group">
+					<label>手机：</label>
+					<input type="text" name="phone" id="phone_num">
+				</div>
+				<div class="form_group">
+					<label>set default：</label>
+					<input type="checkbox" name="defult" id="checked" >
+				</div>
+				<input type="submit" name="" value="提交" class="info_submit" id="btn">
+			</div>
+				<!-- </form> -->
 		</div>
 	</div>
-<!-- <script type="text/javascript">
-$("#btn").click(function(){
-	var user_name = $("#user_name").val()
-	var addr = $("#addr").val()
-	var phone_num = $("#phone_num").val()
-	var zip_code = $("#zip_code").val()
-	csrf = $('input[name="csrfmiddlewaretoken"]').val();
-	// 做简单的数据判断
-	  if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone_num))){ 
-        alert("请确认手机好"); 
-        document.mobileform.mobile.focus(); 
-        return false; 
-    }else {
-    	data = {
-    		'username':user_name,
-    		'addr':addr,
-    		"phone":phone_num,
-    		'zip_code':zip_code,
-    		 "csrfmiddlewaretoken":csrf
 
-    	}
-    	$.post('/users/address/',data,function(data){
-    		if (data.res === 1) {
-    			alert(data.errormsg)
-    		}else if (data.res === 2) {
-    			alert("修改陈宫")
-
-    		}
-    	})
-    } 
-
-	//将获取用户填入的数据传入后端，做进一步处理
+<script type="text/javascript">
+	$('#btn').click( function() {
+		recv_name = $('#user_name').val()
+		addr = $('#addr').val()
+		zip_code = $('#zip_code').val()
+		phone_num = $('#phone_num').val()
+		is_default = false
+		console.log('recv_name:' + recv_name)
+		csrf = $('input[name="csrfmiddlewaretoken"]').val();
+		if ($('#checked').is(':checked')) {
+			is_default = true
+		}
+		data = {
+			'recipient_name':recv_name,
+			'addr':addr,
+			'zip_code':zip_code,
+			'phone_num':phone_num,
+			'is_default':is_default,
+			'csrfmiddlewaretoken': csrf
+		}
+		console.log(data)
+		$.post('/users/address/',data,function(res){
+			if ( res.res=== 2 ) {
+				$('#recv_name').html(recv_name)	
+				$('#recv_addr').html(addr)	
+				$('#recv_phone').html(phone_num)
+			}else if(res.res === 1){
+				alert(res.errmsg)
+			}
+	})
 })
-
-
-</script>
- -->
+</script>	
 {% endblock %}
