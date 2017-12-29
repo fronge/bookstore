@@ -47,12 +47,12 @@ def register_hander(request):
         # 写入数据库
         passport = Passport.objects.add_one_passport(username=username,password=password,email=email)
         # 生成激活的token itstangerous
-        serializer = Serializer(settings.SECRET_KEY, 3600)
-        token = serializer.dumps({'confirm': passport.id})
-        token = token.decode()
+#        serializer = Serializer(settings.SECRET_KEY, 3600)
+ #       token = serializer.dumps({'confirm': passport.id})
+  #      token = token.decode()
         # 给用户的邮箱发激活邮件
         # send_mail('尚硅谷书城-首页用户激活', '', settings.EMAIL_FROM, [email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
-        send_active_email(token,username,email)
+#        send_active_email(token,username,email)
         return JsonResponse({
         'res': 1,
         'code': 200
@@ -200,7 +200,6 @@ def order(request):
     return render(request,'users/user_center_order.html',context)
 
 def verifycode(request):
-<<<<<<< HEAD
 	"""绘制验证码"""
 	try:
 		# 定义一个变量，用于画面的背景色，宽，高
@@ -242,49 +241,6 @@ def verifycode(request):
 	except Exception as e:
 		print(e)
 		return render(request,'users/login.html')
-=======
-    """绘制验证码"""
-    try:
-        # 定义一个变量，用于画面的背景色，宽，高
-        bgcolor = (random.randrange(20,100),random.randrange(20,100),255)
-        width = 100
-        height = 25
-        # 创建画面对象
-        im =  Image.new("RGB",(width,height),bgcolor)
-        # 撞见画笔对象
-        draw = ImageDraw.Draw(im)
-        # 调用画笔的point
-        for i in range(0,100):
-            xy = (random.randrange(0,width),random.randrange(0,height))
-            fill = (random.randrange(0,255),255,random.randrange(0,255))
-            draw.point(xy,fill=fill)
-        # 定义验证码的备选值
-        str1 = 'ABCD123EFGHIJK456LMNOPQRSTU78V9WSYZ0'
-        # 随机选取４个值作为验证码
-        rand_str = ''
-        for i in range(0,4):
-            rand_str += str1[random.randrange(0,len(str1))]
-        # 构造字体对象
-        font = ImageFont.truetype('/usr/share/fonts/truetype/fonts-japanese-gothic.ttf')
-        fontcolor = (255,random.randrange(0,255),random.randrange(0,255))
-        # 绘制4个字
-        draw.text((5,2),rand_str[0],font=font,fill=fontcolor)
-        draw.text((25,2),rand_str[1],font=font,fill=fontcolor)
-        draw.text((50,2),rand_str[2],font=font,fill=fontcolor)
-        draw.text((75,2),rand_str[3],font=font,fill=fontcolor)
-        # 释放画笔
-        del draw
-        # 存入session,用与做进一步的验证
-        request.session['verifycode'] = rand_str
-        # 内存文件操作
-        buf = io.BytesIO()
-        im.save(buf,"png")
-        # 将图片保存在内存中，文件类型为png
-        return HttpResponse(buf.getvalue(),'image/png')
-    except Exception as e:
-        print(e)
-        return render(request,'users/login.html')
->>>>>>> 1a49df58f8390f39ce289b4f2a06a88d8f28ca6d
 
 def register_active(request,token):
     """账户激活"""
