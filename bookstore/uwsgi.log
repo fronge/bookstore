@@ -3109,4 +3109,90 @@ worker 2 buried after 1 seconds
 worker 3 buried after 1 seconds
 worker 4 buried after 1 seconds
 goodbye to uWSGI.
->>>>>>> 1a49df58f8390f39ce289b4f2a06a88d8f28ca6d
+*** Starting uWSGI 2.0.15 (64bit) on [Fri Dec 29 18:59:31 2017] ***
+compiled with version: 5.4.0 20160609 on 21 December 2017 17:10:40
+os: Linux-4.4.0-62-generic #83-Ubuntu SMP Wed Jan 18 14:10:15 UTC 2017
+nodename: iZ2zei5g5sq5b09et9atkxZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /home/workspace/bookstore/bookstore
+writing pidfile to uwsgi.pid
+detected binary path: /root/.virtualenvs/py35/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /home/workspace/bookstore/bookstore
+your processes number limit is 3826
+your memory page size is 4096 bytes
+detected max file descriptor number: 65535
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+probably another instance of uWSGI is running on the same address (127.0.0.1:8090).
+bind(): Address already in use [core/socket.c line 769]
+*** Starting uWSGI 2.0.15 (64bit) on [Fri Dec 29 19:02:01 2017] ***
+compiled with version: 5.4.0 20160609 on 21 December 2017 17:10:40
+os: Linux-4.4.0-62-generic #83-Ubuntu SMP Wed Jan 18 14:10:15 UTC 2017
+nodename: iZ2zei5g5sq5b09et9atkxZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /home/workspace/bookstore/bookstore
+writing pidfile to uwsgi.pid
+detected binary path: /root/.virtualenvs/py35/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /home/workspace/bookstore/bookstore
+your processes number limit is 3826
+your memory page size is 4096 bytes
+detected max file descriptor number: 65535
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8090 fd 3
+Python version: 3.5.2 (default, Nov 23 2017, 16:37:01)  [GCC 5.4.0 20160609]
+Set PythonHome to /root/.virtualenvs/py35/
+Python main interpreter initialized at 0x1dbadd0
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145520 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+unable to load app 0 (mountpoint='') (callable not found or import error)
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x1dbadd0 pid: 14383 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 14383)
+spawned uWSGI worker 1 (pid: 14385, cores: 1)
+[pid: 14385|app: 0|req: 1/1] 121.69.81.166 () {44 vars in 876 bytes} [Fri Dec 29 11:06:13 2017] GET /users/register/ => generated 5590 bytes in 151 msecs (HTTP/1.1 200) 4 headers in 124 bytes (1 switches on core 0)
+进入正确的注册
+[pid: 14385|app: 0|req: 2/2] 121.69.81.166 () {50 vars in 1015 bytes} [Fri Dec 29 11:06:49 2017] POST /users/register_hander/ => generated 23 bytes in 15 msecs (HTTP/1.1 200) 3 headers in 100 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 3/3] 121.69.81.166 () {44 vars in 892 bytes} [Fri Dec 29 11:06:50 2017] GET /users/login/ => generated 4210 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 4/4] 121.69.81.166 () {42 vars in 818 bytes} [Fri Dec 29 11:06:50 2017] GET /users/verifycode/ => generated 1332 bytes in 2 msecs (HTTP/1.1 200) 5 headers in 240 bytes (1 switches on core 0)
+zhangsanzhe
+进入正确的验证
+[pid: 14385|app: 0|req: 5/5] 121.69.81.166 () {50 vars in 1006 bytes} [Fri Dec 29 11:07:09 2017] POST /users/login_check/ => generated 39 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 329 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 6/6] 121.69.81.166 () {44 vars in 889 bytes} [Fri Dec 29 11:07:09 2017] GET /books/index/ => generated 14061 bytes in 40 msecs (HTTP/1.1 200) 6 headers in 192 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 7/7] 121.69.81.166 () {44 vars in 903 bytes} [Fri Dec 29 11:07:27 2017] GET /books/books/detail2 => generated 13362 bytes in 12 msecs (HTTP/1.1 200) 5 headers in 279 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 8/8] 121.69.81.166 () {44 vars in 830 bytes} [Fri Dec 29 11:07:27 2017] GET /comment/comment/2/ => generated 25 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 100 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 9/9] 121.69.81.166 () {50 vars in 1005 bytes} [Fri Dec 29 11:07:29 2017] POST /cart/cart_add/ => generated 10 bytes in 4 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 10/10] 121.69.81.166 () {50 vars in 1005 bytes} [Fri Dec 29 11:07:30 2017] POST /cart/cart_add/ => generated 10 bytes in 3 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 11/11] 121.69.81.166 () {50 vars in 1005 bytes} [Fri Dec 29 11:07:31 2017] POST /cart/cart_add/ => generated 10 bytes in 4 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 12/12] 121.69.81.166 () {44 vars in 902 bytes} [Fri Dec 29 11:07:33 2017] GET /cart/cart_show/ => generated 13676 bytes in 9 msecs (HTTP/1.1 200) 5 headers in 279 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 13/13] 121.69.81.166 () {44 vars in 822 bytes} [Fri Dec 29 11:07:34 2017] GET /cart/cart_count/ => generated 10 bytes in 0 msecs (HTTP/1.1 200) 4 headers in 114 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 14/14] 121.69.81.166 () {44 vars in 894 bytes} [Fri Dec 29 11:07:47 2017] GET /users/logout/ => generated 0 bytes in 1 msecs (HTTP/1.1 302) 5 headers in 220 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 15/15] 121.69.81.166 () {44 vars in 848 bytes} [Fri Dec 29 11:07:47 2017] GET /users/login/ => generated 4210 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 16/16] 121.69.81.166 () {42 vars in 774 bytes} [Fri Dec 29 11:07:48 2017] GET /users/verifycode/ => generated 1346 bytes in 2 msecs (HTTP/1.1 200) 5 headers in 240 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 17/17] 121.69.81.166 () {44 vars in 889 bytes} [Fri Dec 29 11:07:59 2017] GET /books/index/ => generated 14061 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 178 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 18/18] 121.69.81.166 () {44 vars in 903 bytes} [Fri Dec 29 11:08:02 2017] GET /books/books/detail2 => generated 0 bytes in 1 msecs (HTTP/1.1 302) 5 headers in 149 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 19/19] 121.69.81.166 () {44 vars in 889 bytes} [Fri Dec 29 11:08:02 2017] GET /users/login/ => generated 4210 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 14385|app: 0|req: 20/20] 121.69.81.166 () {42 vars in 818 bytes} [Fri Dec 29 11:08:03 2017] GET /users/verifycode/ => generated 1157 bytes in 2 msecs (HTTP/1.1 200) 5 headers in 240 bytes (1 switches on core 0)
+Not Found: /warning
+[pid: 14385|app: 0|req: 21/21] 106.11.224.143 () {36 vars in 515 bytes} [Fri Dec 29 11:31:26 2017] GET /warning => generated 2709 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+Not Found: /pleasereadthis
+[pid: 14385|app: 0|req: 22/22] 106.11.224.211 () {36 vars in 529 bytes} [Fri Dec 29 11:33:14 2017] GET /pleasereadthis => generated 2730 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+Not Found: /please_read/_search
+[pid: 14385|app: 0|req: 23/23] 106.11.224.237 () {36 vars in 539 bytes} [Fri Dec 29 11:34:51 2017] GET /please_read/_search => generated 2745 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+Not Found: /dfshealth.jsp
+[pid: 14385|app: 0|req: 24/24] 106.11.224.49 () {36 vars in 526 bytes} [Fri Dec 29 11:36:08 2017] GET /dfshealth.jsp => generated 2727 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+Not Found: /hadoop/dfshealth.jsp
+[pid: 14385|app: 0|req: 25/25] 106.11.224.240 () {36 vars in 541 bytes} [Fri Dec 29 11:37:24 2017] GET /hadoop/dfshealth.jsp => generated 2748 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)

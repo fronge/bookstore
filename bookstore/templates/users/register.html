@@ -4,7 +4,7 @@
 	<div class="register_con">
 		<div class="l_con fl">
 			<a class="reg_logo"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
-			<div class="reg_slogan">学计算机  ·  来尚硅谷</div>
+			<div class="reg_slogan">藏书阁 ·藏你所爱</div>
 			<div class="reg_banner"></div>
 		</div>
 
@@ -37,7 +37,7 @@
 					</li>
 					<li class="agreement">
 						<input type="checkbox" name="allow" id="allow" checked="checked">
-						<label>同意”尚硅谷书城用户使用协议“</label>
+						<label>同意”藏书阁用户使用协议“</label>
 						<span class="error_tip2">提示信息</span>
 					</li>
 					<li class="reg_sub">
@@ -81,6 +81,7 @@
                     }
                 },
                 error:function (res) {
+		    console.log(res)
                     console.log("error!");
                 }
             })

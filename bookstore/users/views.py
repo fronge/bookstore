@@ -47,12 +47,13 @@ def register_hander(request):
         # 写入数据库
         passport = Passport.objects.add_one_passport(username=username,password=password,email=email)
         # 生成激活的token itstangerous
-#        serializer = Serializer(settings.SECRET_KEY, 3600)
- #       token = serializer.dumps({'confirm': passport.id})
-  #      token = token.decode()
+        serializer = Serializer(settings.SECRET_KEY, 3600)
+        token = serializer.dumps({'confirm': passport.id})
+        token = token.decode()
         # 给用户的邮箱发激活邮件
-        # send_mail('尚硅谷书城-首页用户激活', '', settings.EMAIL_FROM, [email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
+        # send_mail('藏书阁书城-首页用户激活', '', settings.EMAIL_FROM, [email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
 #        send_active_email(token,username,email)
+        print("进入正确的注册")
         return JsonResponse({
         'res': 1,
         'code': 200
@@ -72,12 +73,14 @@ def log(request):
 # 登录校验状态 ajax版本
 @csrf_exempt
 def login_check(request):
+   
     data = json.loads(request.body.decode('utf-8'))
     username = data.get('username','')
     password = data.get('password','')
     remember = data.get('remember','')
     verifycode = data.get('verifycode','')
-    # 如果用户名或密码有空
+    print(username)   
+ # 如果用户名或密码有空
     if not all([username,password,verifycode]):
         return JsonResponse({
             'res':2
@@ -101,6 +104,7 @@ def login_check(request):
         request.session['username']=username
         request.session['login_line']=True
         request.session['passport_id']=user.id
+        print("进入正确的验证")
         return jres
     else:
         # 用户名或密码错误
@@ -125,7 +129,6 @@ def user(request):
     books_li = []
     for id in history_li:
         books = Books.objects.filter(id=id)
-        print(type(books))
         books_li.append(books)
     context = {
         "addr": addr,

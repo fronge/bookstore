@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'cart',
     'order',
     'haystack',
-
 ]
 
 MIDDLEWARE = [
@@ -57,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'bookstore.urls'
 
@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bookstore',
         'USER': 'root',
-        'PASSWORD': 'atguigu',
+        'PASSWORD': '123456',
         'HOST': '127.0.0.1',
         'PORT': 3306,
     }
@@ -172,14 +172,7 @@ CACHES = {
         }
     }
 }
-# 简单的缓存会话存储　，　提升了速度，但是放弃了持久性，会话数据有丢失的风险
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# 持久的缓存数据，每次的缓存都会写入到数据库，会占掉一些性能，但是会保证缓存数据的安全性
-# SESSION_ENGINE = "django.contrub.sessions.backends.cached_db"
-# 基于文件的会话，
-# SESSION_ENGINE = "django.contrub.sessions.backends.file"
-# SESSION_FILE_PATH 可以用来控制django在哪里存储会话文件，默认为tempile.gettempdir()的输出，
-# 大部分情况为/tmp,但是需要保证，有读写权限
 SESSION_CACHE_ALIAS = 'default'
 
 #全文检索配置
